@@ -33,11 +33,12 @@ class AbstractNtlmAuthHandler:
         self._debuglevel = level
 
     def http_error_authentication_required(self, auth_header_field, req, fp, headers):
-        auth_header_value = headers.get(auth_header_field, None)
+        auth_header_values = headers.get_all(auth_header_field, None)
         if auth_header_field:
-            if auth_header_value is not None and 'ntlm' in auth_header_value.lower():
-                fp.close()
-                return self.retry_using_http_NTLM_auth(req, auth_header_field, None, headers)
+            for auth_header_value in auth_header_values:
+                if auth_header_value is not None and 'ntlm' in auth_header_value.lower():
+                    fp.close()
+                    return self.retry_using_http_NTLM_auth(req, auth_header_field, None, headers)
 
     def retry_using_http_NTLM_auth(self, req, auth_header_field, realm, headers):
         user, pw = self.passwd.find_user_password(realm, req.get_full_url())

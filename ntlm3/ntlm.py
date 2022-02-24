@@ -175,7 +175,7 @@ def create_NTLM_NEGOTIATE_MESSAGE(user, type1_flags=NTLM_TYPE1_FLAGS):
     assert BODY_LENGTH == len(msg1), "BODY_LENGTH: %d != msg1: %d" % (BODY_LENGTH, len(msg1))
 
     msg1 += Workstation + DomainName
-    msg1 = base64.b64encode(msg1)
+    msg1 = base64.b64encode(msg1).decode('utf-8')
     return msg1
 
 
@@ -316,7 +316,7 @@ def create_NTLM_AUTHENTICATE_MESSAGE(nonce, user, domain, password, NegotiateFla
 
     Payload = DomainName + UserName + Workstation + LmChallengeResponse + NtChallengeResponse + EncryptedRandomSessionKey
     msg3 += Payload
-    msg3 = base64.b64encode(msg3)
+    msg3 = base64.b64encode(msg3).decode('utf-8')
     return msg3
 
 
